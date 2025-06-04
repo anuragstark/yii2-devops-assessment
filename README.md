@@ -5,12 +5,12 @@ A comprehensive DevOps implementation showcasing automated deployment of a Yii2 
 ## 📋 Table of Contents
 
 - [Overview]
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
-- [Deployment Process](#deployment-process)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
+- [Architecture]
+- [Prerequisites]
+- [Setup Instructions]
+- [Deployment Process]
+- [Testing]
+- [Troubleshooting]
 
 ## 🏗️ Overview
 
@@ -90,7 +90,7 @@ https://hub.docker.com/repository/create
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/yii2-devops-assessment.git
+git clone [https://github.com/anuragstark/yii2-devops-assessment.git]
 cd yii2-devops-assessment
 
 # Update configuration files with your details
@@ -147,7 +147,7 @@ docker service ls
 curl localhost:8080
 ```
 
-## 🚀 Deployment Process
+##  Deployment Process
 
 ### Automated Deployment (CI/CD)
 
@@ -182,7 +182,7 @@ git push origin main
 # Go to Actions tab → Deploy Yii2 Application → Run workflow
 ```
 
-## 🧪 Testing
+##  Testing
 
 ### Local Testing
 
@@ -230,7 +230,7 @@ df -h
 free -h
 ```
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -294,7 +294,7 @@ docker stats
 # Add worker_processes, worker_connections tuning
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
