@@ -6,7 +6,7 @@
     app_user: "ubuntu"
     app_directory: "/home/{{ app_user }}/yii2-app"
     repo_url: "{{ github_repo_url | default('https://github.com/anuragstark/yii2-devops-assessment.git') }}"
-    docker_image: "{{ docker_image_name | default('your-dockerhub-username/yii2-app:latest') }}"
+    docker_image: "{{ docker_image_name | default('anuragstark/yii2-app') }}"
     service_name: "yii2-app"
 
   tasks:
