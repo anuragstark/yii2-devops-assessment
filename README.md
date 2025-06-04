@@ -4,7 +4,7 @@ A comprehensive DevOps implementation showcasing automated deployment of a Yii2 
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
+- [Overview]
 - [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
