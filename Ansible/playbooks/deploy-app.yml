@@ -1,0 +1,114 @@
+---
+- name: Deploy Yii2 Application
+  hosts: ec2_servers
+  become: true
+  vars:
+    app_user: "ubuntu"
+    app_directory: "/home/{{ app_user }}/yii2-app"
+    repo_url: "{{ github_repo_url | default('https://github.com/your-username/yii2-devops-assessment.git') }}"
+    docker_image: "{{ docker_image_name | default('your-dockerhub-username/yii2-app:latest') }}"
+    service_name: "yii2-app"
+
+  tasks:
+    - name: Clone or update repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_directory }}"
+        version: main
+        force: yes
+      register: git_result
+
+    - name: Login to Docker Hub
+      docker_login:
+        username: "{{ docker_hub_username }}"
+        password: "{{ docker_hub_password }}"
+      when: docker_hub_username is defined and docker_hub_password is defined
+
+    - name: Pull latest Docker image
+      docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+        force_source: yes
+      register: image_pull
+
+    - name: Check if Docker Swarm service exists
+      shell: docker service ls --filter name={{ service_name }} --format "{{ '{{' }}.Name{{ '}}' }}"
+      register: service_check
+      changed_when: false
+      failed_when: false
+
+    - name: Deploy application as Docker Swarm service (new deployment)
+      shell: |
+        cd {{ app_directory }}
+        export DOCKER_IMAGE={{ docker_image }}
+        docker stack deploy -c docker-compose.yml {{ service_name }}
+      when: service_name not in service_check.stdout
+      register: new_deployment
+
+    - name: Update existing Docker Swarm service
+      shell: |
+        cd {{ app_directory }}
+        export DOCKER_IMAGE={{ docker_image }}
+        docker service update --image {{ docker_image }} {{ service_name }}_yii2-app
+      when: 
+        - service_name in service_check.stdout
+        - image_pull.changed
+      register: service_update
+
+    - name: Wait for service to be ready
+      shell: |
+        docker service ls --filter name={{ service_name }}_yii2-app --format "{{ '{{' }}.Replicas{{ '}}' }}"
+      register: service_status
+      until: "'2/2' in service_status.stdout"
+      retries: 30
+      delay: 10
+      when: new_deployment.changed or service_update.changed
+
+    - name: Verify application is accessible
+      uri:
+        url: "http://localhost:8080"
+        method: GET
+        status_code: 200
+      register: health_check
+      retries: 5
+      delay: 10
+      until: health_check.status == 200
+
+    - name: Display deployment status
+      debug:
+        msg: |
+          Deployment Status:
+          - Repository updated: {{ git_result.changed }}
+          - Image pulled: {{ image_pull.changed }}
+          - Service deployed/updated: {{ new_deployment.changed or service_update.changed }}
+          - Health check: {{ 'PASSED' if health_check.status == 200 else 'FAILED' }}
+
+    - name: Rollback on failure
+      block:
+        - name: Get previous image version
+          shell: docker service inspect {{ service_name }}_yii2-app --format "{{ '{{' }}.PreviousSpec.TaskTemplate.ContainerSpec.Image{{ '}}' }}"
+          register: previous_image
+          when: service_update.changed and health_check.failed
+
+        - name: Rollback to previous version
+          shell: docker service update --rollback {{ service_name }}_yii2-app
+          when: 
+            - service_update.changed 
+            - health_check.failed
+            - previous_image.stdout != ""
+
+        - name: Wait for rollback to complete
+          shell: docker service ls --filter name={{ service_name }}_yii2-app --format "{{ '{{' }}.Replicas{{ '}}' }}"
+          register: rollback_status
+          until: "'2/2' in rollback_status.stdout"
+          retries: 15
+          delay: 10
+          when: 
+            - service_update.changed 
+            - health_check.failed
+
+      rescue:
+        - name: Log rollback failure
+          debug:
+            msg: "Rollback failed. Manual intervention required."
+      when: health_check.failed is defined and health_check.failed

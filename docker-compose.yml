@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  yii2-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: ${DOCKER_IMAGE:-yii2-app:latest}
+    container_name: yii2-app
+    ports:
+      - "8080:80"
+    environment:
+      - YII_DEBUG=false
+      - YII_ENV=prod
+    volumes:
+      - app_logs:/var/www/html/runtime/logs
+    networks:
+      - yii2-network
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  app_logs:
+
+networks:
+  yii2-network:
+    driver: overlay
+    attachable: true

@@ -1,0 +1,59 @@
+# Yii2 specific
+app/runtime/*
+app/web/assets/*
+app/config/db.php
+app/config/params-local.php
+app/config/web-local.php
+app/config/console-local.php
+
+# Composer
+vendor/
+composer.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# Ansible
+ansible/inventory/hosts.yml
+*.retry
+
+# SSH Keys
+*.pem
+*.key
+id_rsa*
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Temporary files
+tmp/
+temp/
+
+# Node modules (if using)
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
