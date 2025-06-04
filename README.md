@@ -2,7 +2,7 @@
 
 A comprehensive DevOps implementation showcasing automated deployment of a Yii2 PHP application using Docker Swarm, NGINX reverse proxy, GitHub Actions CI/CD, and Ansible automation on AWS EC2.
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Overview]
 - [Architecture]
@@ -12,7 +12,7 @@ A comprehensive DevOps implementation showcasing automated deployment of a Yii2 
 - [Testing]
 - [Troubleshooting]
 
-## 🏗️ Overview
+##  Overview
 
 This project demonstrates a production-ready deployment pipeline that includes:
 
@@ -24,7 +24,7 @@ This project demonstrates a production-ready deployment pipeline that includes:
 - **Infrastructure**: Ansible for automated server configuration
 - **Platform**: AWS EC2 with Ubuntu 20.04/22.04
 
-## 🏛️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -49,7 +49,7 @@ This project demonstrates a production-ready deployment pipeline that includes:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## ✅ Prerequisites
+## Prerequisites
 
 ### Local Development
 ```bash
@@ -84,7 +84,7 @@ https://hub.docker.com/repository/create
 # Repository name: yii2-app
 ```
 
-## 🛠️ Setup Instructions
+##  Setup Instructions
 
 ### Step 1: Clone and Configure Repository
 
