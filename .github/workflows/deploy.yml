@@ -5,6 +5,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/yii2-app
   REGISTRY: docker.io
