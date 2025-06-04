@@ -99,7 +99,7 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     <body>
         <div class="container">
             <div class="header">
-                <h1>🚀 Yii2 DevOps Assessment</h1>
+                <h1>Yii2 DevOps Assessment</h1>
                 <p>Deployed via Docker Swarm + NGINX + CI/CD + Ansible</p>
             </div>
             
@@ -158,10 +158,22 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 }
 
 // Helper functions
+// function getUptime() {
+//     if (file_exists('/proc/uptime')) {
+//         $uptime = file_get_contents('/proc/uptime');
+//         $uptime = floatval($uptime);
+//         $days = floor($uptime / 86400);
+//         $hours = floor(($uptime % 86400) / 3600);
+//         $minutes = floor(($uptime % 3600) / 60);
+//         return sprintf('%dd %dh %dm', $days, $hours, $minutes);
+//     }
+//     return 'N/A';
+
+// Helper functions
 function getUptime() {
     if (file_exists('/proc/uptime')) {
         $uptime = file_get_contents('/proc/uptime');
-        $uptime = floatval($uptime);
+        $uptime = (int)floatval($uptime);
         $days = floor($uptime / 86400);
         $hours = floor(($uptime % 86400) / 3600);
         $minutes = floor(($uptime % 3600) / 60);
@@ -169,6 +181,7 @@ function getUptime() {
     }
     return 'N/A';
 }
+
 
 function getMemoryUsage() {
     $memory = memory_get_usage(true);
