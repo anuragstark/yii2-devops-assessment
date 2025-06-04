@@ -5,7 +5,7 @@
   vars:
     app_user: "ubuntu"
     app_directory: "/home/{{ app_user }}/yii2-app"
-    repo_url: "{{ github_repo_url | default('https://github.com/your-username/yii2-devops-assessment.git') }}"
+    repo_url: "{{ github_repo_url | default('https://github.com/anuragstark/yii2-devops-assessment.git') }}"
     docker_image: "{{ docker_image_name | default('your-dockerhub-username/yii2-app:latest') }}"
     service_name: "yii2-app"
 
